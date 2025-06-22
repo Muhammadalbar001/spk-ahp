@@ -17,13 +17,27 @@ class RouteServiceProvider extends ServiceProvider
      *
      * @var string
      */
-    public const HOME = '/dashboard';
+    public static function redirectByRole()
+{
+    $role = auth()->user()->role ?? null;
+
+    return match ($role) {
+        'admin' => '/admin/dashboard',
+        'siswa' => '/siswa/dashboard',
+        'wali_kelas' => '/wali/dashboard',
+        'waka_kesiswaan' => '/waka/dashboard',
+        'guru_penyeleksi' => '/penyeleksi/dashboard',
+        default => '/dashboard',
+    };
+}
 
     /**
      * Define your route model bindings, pattern filters, and other route configuration.
      *
      * @return void
      */
+    public const HOME = '/siswa/dashboard';
+
     public function boot()
     {
         $this->configureRateLimiting();

@@ -3,17 +3,15 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Auth\LoginRequest;
-use App\Providers\RouteServiceProvider;
-use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
+use Illuminate\Http\RedirectResponse;
 
 class AuthenticatedSessionController extends Controller
 {
     /**
-     * Display the login view.
+     * Tampilkan form login.
      */
     public function create(): View
     {
@@ -21,54 +19,44 @@ class AuthenticatedSessionController extends Controller
     }
 
     /**
-     * Handle an incoming authentication request.
+     * Proses permintaan login.
      */
     public function store(Request $request): RedirectResponse
-{
-    $request->validate([
-        'email' => ['required', 'string', 'email'],
-        'password' => ['required', 'string'],
-    ]);
+    {
+        $credentials = $request->validate([
+            'email' => ['required', 'email'],
+            'password' => ['required'],
+        ]);
 
-    if (! Auth::attempt($request->only('email', 'password'), $request->boolean('remember'))) {
-        throw ValidationException::withMessages([
-            'email' => __('auth.failed'),
+        if (Auth::attempt($credentials, $request->boolean('remember'))) {
+            $request->session()->regenerate();
+
+            // Arahkan ke dashboard sesuai role
+            $role = Auth::user()->role;
+            return match ($role) {
+                'admin' => redirect()->route('admin.dashboard'),
+                'siswa' => redirect()->route('siswa.dashboard'),
+                'wali_kelas' => redirect()->route('wali.dashboard'),
+                'waka_kesiswaan' => redirect()->route('waka.dashboard'),
+                'guru_penyeleksi' => redirect()->route('penyeleksi.dashboard'),
+                'kepsek' => redirect()->route('kepsek.dashboard'),
+                default => redirect('/dashboard'),
+            };
+        }
+
+        return back()->withErrors([
+            'email' => 'Email atau password salah.',
         ]);
     }
 
-    $request->session()->regenerate();
-
-    // Redirect berdasarkan role
-    $role = Auth::user()->role;
-
-    switch ($role) {
-        case 'admin':
-            return redirect()->route('admin.dashboard');
-        case 'siswa':
-            return redirect()->route('siswa.dashboard');
-        case 'wali_kelas':
-            return redirect()->route('wali.dashboard');
-        case 'waka_kesiswaan':
-            return redirect()->route('waka.dashboard');
-        case 'guru_penyeleksi':
-            return redirect()->route('penyeleksi.dashboard');
-        case 'kepsek':
-            return redirect()->route('kepsek.dashboard');
-        default:
-            return redirect()->route('dashboard');
-    }
-}
-
-
     /**
-     * Destroy an authenticated session.
+     * Logout.
      */
     public function destroy(Request $request): RedirectResponse
     {
         Auth::guard('web')->logout();
 
         $request->session()->invalidate();
-
         $request->session()->regenerateToken();
 
         return redirect('/');

@@ -7,12 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Siswa extends Model
 {
-    use HasFactory;
-
-    protected $table = 'siswa';
-
     protected $fillable = [
-        'user_id', 'nisn', 'nama', 'jenis_kelamin', 'alamat', 'foto'
+        'user_id', 'nama', 'nisn', 'jenis_kelamin', 'alamat',
     ];
 
     public function user()

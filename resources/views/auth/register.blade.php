@@ -1,52 +1,74 @@
 <x-guest-layout>
-    <form method="POST" action="{{ route('register') }}">
+    <form method="POST" action="{{ route('register') }}" class="max-w-md mx-auto p-6 bg-white shadow rounded">
         @csrf
 
-        <!-- Name -->
-        <div>
-            <x-input-label for="name" :value="__('Name')" />
-            <x-text-input id="name" class="block mt-1 w-full" type="text" name="name" :value="old('name')" required autofocus autocomplete="name" />
-            <x-input-error :messages="$errors->get('name')" class="mt-2" />
+        <h2 class="text-2xl font-bold text-center text-indigo-700 mb-4">Daftar Siswa</h2>
+
+        {{-- Validasi --}}
+        @if ($errors->any())
+        <div class="bg-red-100 text-red-600 p-3 rounded mb-4">
+            <ul class="text-sm list-disc pl-5">
+                @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+        @endif
+
+        {{-- Nama --}}
+        <div class="mb-3">
+            <label class="block text-sm font-medium">Nama</label>
+            <input type="text" name="name" value="{{ old('name') }}" required class="w-full border rounded p-2">
         </div>
 
-        <!-- Email Address -->
-        <div class="mt-4">
-            <x-input-label for="email" :value="__('Email')" />
-            <x-text-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required autocomplete="username" />
-            <x-input-error :messages="$errors->get('email')" class="mt-2" />
+        {{-- Email --}}
+        <div class="mb-3">
+            <label class="block text-sm font-medium">Email</label>
+            <input type="email" name="email" value="{{ old('email') }}" required class="w-full border rounded p-2">
         </div>
 
-        <!-- Password -->
-        <div class="mt-4">
-            <x-input-label for="password" :value="__('Password')" />
-
-            <x-text-input id="password" class="block mt-1 w-full"
-                            type="password"
-                            name="password"
-                            required autocomplete="new-password" />
-
-            <x-input-error :messages="$errors->get('password')" class="mt-2" />
+        {{-- NISN --}}
+        <div class="mb-3">
+            <label class="block text-sm font-medium">NISN</label>
+            <input type="text" name="nisn" value="{{ old('nisn') }}" required class="w-full border rounded p-2">
         </div>
 
-        <!-- Confirm Password -->
-        <div class="mt-4">
-            <x-input-label for="password_confirmation" :value="__('Confirm Password')" />
-
-            <x-text-input id="password_confirmation" class="block mt-1 w-full"
-                            type="password"
-                            name="password_confirmation" required autocomplete="new-password" />
-
-            <x-input-error :messages="$errors->get('password_confirmation')" class="mt-2" />
+        {{-- Jenis Kelamin --}}
+        <div class="mb-3">
+            <label class="block text-sm font-medium">Jenis Kelamin</label>
+            <select name="jenis_kelamin" class="w-full border rounded p-2">
+                <option value="">-- Pilih --</option>
+                <option value="L" {{ old('jenis_kelamin') == 'L' ? 'selected' : '' }}>Laki-laki</option>
+                <option value="P" {{ old('jenis_kelamin') == 'P' ? 'selected' : '' }}>Perempuan</option>
+            </select>
         </div>
 
-        <div class="flex items-center justify-end mt-4">
-            <a class="underline text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800" href="{{ route('login') }}">
-                {{ __('Already registered?') }}
-            </a>
-
-            <x-primary-button class="ml-4">
-                {{ __('Register') }}
-            </x-primary-button>
+        {{-- Alamat --}}
+        <div class="mb-3">
+            <label class="block text-sm font-medium">Alamat</label>
+            <textarea name="alamat" rows="3" class="w-full border rounded p-2">{{ old('alamat') }}</textarea>
         </div>
+
+        {{-- Password --}}
+        <div class="mb-3">
+            <label class="block text-sm font-medium">Password</label>
+            <input type="password" name="password" required class="w-full border rounded p-2">
+        </div>
+
+        {{-- Konfirmasi Password --}}
+        <div class="mb-3">
+            <label class="block text-sm font-medium">Konfirmasi Password</label>
+            <input type="password" name="password_confirmation" required class="w-full border rounded p-2">
+        </div>
+
+        {{-- Submit --}}
+        <div class="text-center">
+            <button class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded">Daftar</button>
+        </div>
+
+        {{-- Link login --}}
+        <p class="text-sm text-center mt-4 text-gray-600">
+            Sudah punya akun? <a href="{{ route('login') }}" class="text-indigo-600 hover:underline">Login di sini</a>
+        </p>
     </form>
 </x-guest-layout>

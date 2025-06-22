@@ -1,17 +1,36 @@
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800">Dashboard Siswa</h2>
+        <h2 class="text-xl font-bold text-indigo-700">Dashboard Siswa</h2>
     </x-slot>
 
-    <div class="p-6 space-y-4">
-        <div class="bg-white shadow rounded-xl p-6">
-            <h3 class="text-lg font-semibold mb-2">Halo, {{ Auth::user()->name }}</h3>
-            <p class="text-sm text-gray-600">Anda login sebagai <strong>Siswa</strong></p>
-        </div>
+    <div class="flex bg-gray-50 min-h-[calc(100vh-4rem)]">
+        <aside class="w-64 bg-white shadow-lg border-r border-indigo-200 p-6 space-y-4">
+            <h3 class="text-xl font-semibold text-indigo-700 mb-4">📋 Menu Siswa</h3>
 
-        <div class="space-y-2">
-            <a href="#" class="block bg-yellow-100 hover:bg-yellow-200 p-4 rounded-xl shadow text-center">📝 Form Pendaftaran</a>
-            <a href="#" class="block bg-indigo-100 hover:bg-indigo-200 p-4 rounded-xl shadow text-center">📄 Hasil Seleksi</a>
-        </div>
+            <a href="{{ route('siswa.hasil.index') }}"
+                class="flex items-center gap-3 px-4 py-3 rounded-md shadow hover:bg-indigo-100 border border-indigo-200 text-indigo-800 font-medium transition">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-indigo-600" fill="none" viewBox="0 0 24 24"
+                    stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                </svg>
+                <span>📄 Lihat Hasil Seleksi</span>
+            </a>
+
+            <a href="{{ route('siswa.hasil.cetak') }}"
+                class="flex items-center gap-3 px-4 py-3 rounded-md shadow hover:bg-indigo-100 border border-indigo-200 text-indigo-800 font-medium transition">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-indigo-600" fill="none" viewBox="0 0 24 24"
+                    stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 11V7m0 8v-2m-6 4h12" />
+                </svg>
+                <span>🖨️ Cetak Bukti Seleksi</span>
+            </a>
+        </aside>
+
+        <main class="flex-1 p-8">
+            <div class="bg-white p-6 rounded-xl shadow border border-gray-100">
+                <h3 class="text-xl font-semibold text-gray-800 mb-4">Halo, {{ Auth::user()->name }}</h3>
+                <p class="text-gray-600">Cek hasil seleksi atau cetak bukti dari menu di kiri.</p>
+            </div>
+        </main>
     </div>
 </x-app-layout>

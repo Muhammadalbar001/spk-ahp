@@ -8,6 +8,8 @@ module.exports = {
         './resources/views/**/*.blade.php',
     ],
 
+    darkMode: false, // ⛔ Nonaktifkan dark mode sepenuhnya
+
     theme: {
         extend: {
             fontFamily: {
